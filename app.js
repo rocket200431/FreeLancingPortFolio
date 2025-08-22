@@ -1,4 +1,5 @@
 
+  
         // Mobile menu toggle
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
@@ -11,7 +12,7 @@
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                // Hide mobile menu on click
+                // Hide mobile menu on link click
                 if (!mobileMenu.classList.contains('hidden')) {
                     mobileMenu.classList.add('hidden');
                 }
@@ -22,6 +23,14 @@
                     });
                 }
             });
+        });
+
+        // --- NEW: Close menu when clicking outside ---
+        document.addEventListener('click', function(e) {
+            // Check if the menu is open and the click is not the menu button itself or inside the menu
+            if (!mobileMenu.classList.contains('hidden') && !mobileMenuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
+                mobileMenu.classList.add('hidden');
+            }
         });
 
         // Contact Form Submission Handler
@@ -35,10 +44,9 @@
             const action = form.action;
             const submitButton = form.querySelector('button[type="submit"]');
 
-            // --- IMPROVEMENT: Provide immediate feedback ---
             submitButton.disabled = true;
             submitButton.textContent = 'Sending...';
-            formStatus.innerHTML = ''; // Clear previous status messages
+            formStatus.innerHTML = '';
 
             fetch(action, {
                 method: 'POST',
@@ -62,9 +70,7 @@
             }).catch(error => {
                 formStatus.innerHTML = '<p class="text-red-600 font-semibold">Oops! There was a problem submitting your form. Please try again.</p>';
             }).finally(() => {
-                // --- IMPROVEMENT: Re-enable the button after submission ---
                 submitButton.disabled = false;
                 submitButton.textContent = 'Send Message';
             });
         });
-   
